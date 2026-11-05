@@ -1,0 +1,25 @@
+# Traefik dynamic configuration for verify.velda.ai — drop into
+# /docker/traefik/config/verify.yml. Traefik's file provider watches that directory,
+# so NO restart is needed (and none should be done).
+#
+# This file was supplied by Jason and is reproduced exactly as given.
+
+http:
+  routers:
+    verify:
+      rule: "Host(verify.velda.ai)"
+      entryPoints: [websecure]
+      service: verify
+      tls:
+        certResolver: letsencrypt
+      middlewares: [verify-headers]
+  middlewares:
+    verify-headers:
+      headers:
+        stsSeconds: 31536000
+  services:
+    verify:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://127.0.0.1:8091"
