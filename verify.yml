@@ -2,7 +2,8 @@
 # /docker/traefik/config/verify.yml. Traefik's file provider watches that directory,
 # so NO restart is needed (and none should be done).
 #
-# This file was supplied by Jason and is reproduced exactly as given.
+# Port updated to 8094 on 2026-11-05: 8091 and 8092 are both taken on this host
+# (8092 is Reviva QA's rangeserver.py). Everything else is as supplied by Jason.
 
 http:
   routers:
@@ -22,4 +23,4 @@ http:
       loadBalancer:
         passHostHeader: true
         servers:
-          - url: "http://127.0.0.1:8092"
+          - url: "http://127.0.0.1:8094"

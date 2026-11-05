@@ -4,7 +4,7 @@
 #
 # What it does, in order:
 #   1. creates /var/www/verify.velda.ai and copies the site files there
-#   2. installs and starts a systemd service serving it on 127.0.0.1:8092
+#   2. installs and starts a systemd service serving it on 127.0.0.1:8094
 #   3. installs the Traefik route WITHOUT restarting Traefik
 #   4. checks it locally, then over https
 set -euo pipefail
@@ -13,12 +13,24 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WEBROOT=/var/www/verify.velda.ai
 TRAEFIK_DIR=/docker/traefik/config
 DOMAIN=verify.velda.ai
-PORT=8092
+PORT=8094
 
 if [ "$(id -u)" -ne 0 ]; then
   echo "Needs root: sudo bash $0" >&2
   exit 1
 fi
+
+# --- preflight: never start on a port someone else owns ------------------------------
+# 8091 was taken; 8092 is Reviva QA's rangeserver.py. Both were found the hard way,
+# so this now refuses rather than silently serving nothing.
+if command -v ss >/dev/null 2>&1 && ss -ltn 2>/dev/null | grep -q ":$PORT "; then
+  echo "FATAL: port $PORT is already in use on this machine:" >&2
+  ss -ltnp 2>/dev/null | grep ":$PORT " >&2 || true
+  echo "Pick another free port (try: ss -ltn | grep LISTEN), set PORT= at the top of this" >&2
+  echo "script and the url in verify.yml to match, then run it again. Nothing was changed." >&2
+  exit 1
+fi
+echo "    port $PORT is free"
 
 echo "==> 1/4 site files"
 mkdir -p "$WEBROOT"
