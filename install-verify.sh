@@ -4,7 +4,7 @@
 #
 # What it does, in order:
 #   1. creates /var/www/verify.velda.ai and copies the site files there
-#   2. installs and starts a systemd service serving it on 127.0.0.1:8091
+#   2. installs and starts a systemd service serving it on 127.0.0.1:8092
 #   3. installs the Traefik route WITHOUT restarting Traefik
 #   4. checks it locally, then over https
 set -euo pipefail
@@ -13,7 +13,7 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WEBROOT=/var/www/verify.velda.ai
 TRAEFIK_DIR=/docker/traefik/config
 DOMAIN=verify.velda.ai
-PORT=8091
+PORT=8092
 
 if [ "$(id -u)" -ne 0 ]; then
   echo "Needs root: sudo bash $0" >&2

@@ -15,15 +15,15 @@ sudo bash install-verify.sh
 That is the entire deployment. It does steps 1–4 of the brief:
 
 1. creates `/var/www/verify.velda.ai/` and copies `verify.velda.ai/` (index.html + guides/) into it
-2. writes and starts `/etc/systemd/system/verify-site.service` — `python3 -m http.server 8091 --bind 127.0.0.1`
+2. writes and starts `/etc/systemd/system/verify-site.service` — `python3 -m http.server 8092 --bind 127.0.0.1`
 3. copies `verify.yml` into `/docker/traefik/config/` — **Traefik is not restarted**; its file provider hot-reloads
-4. checks `http://127.0.0.1:8091/` then polls `https://verify.velda.ai/` until it returns 200
+4. checks `http://127.0.0.1:8092/` then polls `https://verify.velda.ai/` until it returns 200
 
 ## Checks it must satisfy
 
 ```bash
 systemctl status verify-site --no-pager
-curl -I http://127.0.0.1:8091/            # expect 200
+curl -I http://127.0.0.1:8092/            # expect 200
 curl -I https://verify.velda.ai/          # expect 200  ← the acceptance check
 dig +short verify.velda.ai                # expect 2.24.64.239
 ```
@@ -41,7 +41,7 @@ sudo tar -xzf /path/to/site.tar.gz -C /var/www/verify.velda.ai/
 
 | Symptom | Cause |
 |---|---|
-| local 8091 → 000 | service not running: `journalctl -u verify-site -n 50` |
+| local 8092 → 000 | service not running: `journalctl -u verify-site -n 50` |
 | https → 404 | Traefik has no router for the host: is `verify.yml` in the directory its file provider watches? |
 | https → 000 / TLS error | no certificate: check Traefik's `acme.json`, and that DNS is still DNS-only pointing here |
 | https works but wrong site | another router matches `verify.velda.ai` first — check the other files in that config dir |
