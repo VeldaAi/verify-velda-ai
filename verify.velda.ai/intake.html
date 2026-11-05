@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Start — Get App Verified</title>
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="/">Get App Verified</a>
+  <a href="/#pricing">Pricing</a>
+  <a href="/intake.html">Start</a>
+  <a href="/guides/01-add-us.html">Add us</a>
+  <a href="/guides/done-for-you.html">Done for you</a>
+  <a href="/contact.html">Contact</a>
+</nav>
+<header class="hero">
+  <h1>Start here</h1>
+  <p>Tell us about the app. About 3 minutes. Then pay on Stripe if you have not already.</p>
+</header>
+<main class="wrap">
+  <section class="card">
+    <div class="warn">
+      <p>This form goes to Formspree, then to our email. Do not type a password, card number, API key, token, or client secret.</p>
+      <p>Payment is a separate Stripe page. We email the $100 guide pack by hand to the Stripe purchase email after we confirm the payment. There is no instant download.</p>
+    </div>
+    <form id="f" action="https://formspree.io/f/xgaaqljw" method="POST" novalidate>
+      <input type="hidden" name="_subject" value="Get App Verified intake">
+      <div class="fld" data-req="name">
+        <label class="q" for="name">Your name <span class="req">*</span></label>
+        <input type="text" id="name" name="name" autocomplete="name" maxlength="200">
+        <div class="err">Please type your name.</div>
+      </div>
+      <div class="fld" data-req="email">
+        <label class="q" for="email">Your email <span class="req">*</span></label>
+        <p class="hint">Use the same email you use at Stripe if you can.</p>
+        <input type="email" id="email" name="email" autocomplete="email" maxlength="200">
+        <div class="err">Please type a valid email.</div>
+      </div>
+      <div class="fld" data-req="app">
+        <label class="q" for="app">App name <span class="req">*</span></label>
+        <p class="hint">Exactly as it shows on the Google sign-in screen.</p>
+        <input type="text" id="app" name="app_name" maxlength="200">
+        <div class="err">Please type your app name.</div>
+      </div>
+      <div class="fld" data-req="home">
+        <label class="q" for="home">App homepage link <span class="req">*</span></label>
+        <p class="hint">Must start with https:// and be on a domain you control.</p>
+        <input type="url" id="home" name="homepage_url" placeholder="https://" inputmode="url" maxlength="500">
+        <div class="err">Please paste a public https:// link.</div>
+      </div>
+      <div class="fld" data-req="priv">
+        <label class="q" for="priv">Privacy policy link <span class="req">*</span></label>
+        <p class="hint">Same domain as the homepage. Must start with https://.</p>
+        <input type="url" id="priv" name="privacy_url" placeholder="https://" inputmode="url" maxlength="500">
+        <div class="err">Please paste a public https:// link.</div>
+      </div>
+      <div class="fld" data-req="pid">
+        <label class="q" for="pid">Google Cloud project ID <span class="req">*</span></label>
+        <p class="hint">In Google Cloud, open the project picker at the top left. Copy the ID, not only the display name. It looks like <code>my-app-123456</code>: 6–30 letters, numbers, and hyphens, starting with a letter.</p>
+        <input type="text" id="pid" name="project_id" maxlength="30" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="my-app-123456">
+        <div class="err">Use the project ID: 6–30 characters, lowercase letters, numbers, and hyphens, starting with a letter.</div>
+      </div>
+      <div class="fld" id="data">
+        <label class="q">Which Google data does your app use? <span class="req">*</span></label>
+        <p class="hint">Tick what the app uses now. Not features you might add later.</p>
+        <div class="opts">
+          <label><input type="checkbox" name="google_data" value="Sign-in only"> Sign-in only (name and email)</label>
+          <label><input type="checkbox" name="google_data" value="Google Drive"> Google Drive</label>
+          <label><input type="checkbox" name="google_data" value="Gmail"> Gmail</label>
+          <label><input type="checkbox" name="google_data" value="Calendar"> Calendar</label>
+          <label><input type="checkbox" name="google_data" value="Sheets/Docs"> Sheets / Docs</label>
+          <label><input type="checkbox" name="google_data" value="Other" id="oth"> Other</label>
+          <input type="text" name="google_data_other" id="othtxt" maxlength="300" placeholder="What else?" style="display:none">
+        </div>
+        <div class="err">Please tick at least one. If you tick Other, type what it is.</div>
+      </div>
+      <div class="fld" id="plan">
+        <label class="q">Plan <span class="req">*</span></label>
+        <div class="opts">
+          <label><input type="radio" name="plan" value="Done-for-you $249"> Done for you — $249</label>
+          <label><input type="radio" name="plan" value="DIY guides $100"> DIY guides — $100</label>
+          <label><input type="radio" name="plan" value="Upgrade from DIY $149"> Upgrade from DIY — $149</label>
+        </div>
+        <div class="err">Please pick a plan.</div>
+      </div>
+      <div class="fld" id="access">
+        <label class="q">Have you added getappverified@gmail.com as OAuth Config Editor? <span class="req">*</span></label>
+        <p class="hint">Not Owner. Owner can delete the project and change billing. We do not need that. <a href="/guides/01-add-us.html">How to add us</a>. DIY buyers can pick “Not yet” and skip this until they want the upgrade.</p>
+        <div class="opts">
+          <label><input type="radio" name="added_access" value="Yes, OAuth Config Editor"> Yes, OAuth Config Editor</label>
+          <label><input type="radio" name="added_access" value="Not yet"> Not yet</label>
+        </div>
+        <div class="err">Please pick one.</div>
+      </div>
+      <div class="fld" id="notes-wrap">
+        <label class="q" for="notes">Anything else? (optional)</label>
+        <textarea id="notes" name="notes" maxlength="2000"></textarea>
+        <div class="err">Take out passwords, card numbers, API keys, tokens, and client secrets. Email those to nobody.</div>
+      </div>
+      <div class="terms card" style="box-shadow:none;background:#f7f9fc">
+        <strong>Before you send</strong>
+        <ul>
+          <li>Done for you ($249), and the $149 upgrade: we refund that fee if Google rejects the app. We do not refund it if you do not reply for 30 days, or if you remove our access before we finish. The original $100 DIY purchase stays final sale.</li>
+          <li>The $100 DIY pack is final sale, except where the law gives you a refund right that cannot be waived.</li>
+          <li>We cannot guarantee that Google will approve the app.</li>
+          <li>A third-party security review (CASA) is not included.</li>
+          <li>Full wording: <a href="/terms.html">Terms</a>, <a href="/refunds.html">Refunds</a>, <a href="/privacy.html">Privacy</a>.</li>
+        </ul>
+        <div class="fld" id="agree">
+          <label class="q" style="display:flex;gap:10px;align-items:flex-start"><input type="checkbox" name="agree_terms" value="yes"> I agree <span class="req">*</span></label>
+          <div class="err">Please tick “I agree”.</div>
+        </div>
+      </div>
+      <button class="send" type="submit">Send</button>
+    </form>
+    <div id="thanks" class="okbox">
+      <h2>Formspree accepted the form.</h2>
+      <p>That means Formspree took the submission. It does not mean the message is already in our inbox. We reply within 1 business day after we see a message. If you do not hear back, email getappverified@gmail.com.</p>
+      <p>This page does not email the guide pack. After a person sees a paid Stripe payment, we email the pack to that purchase email. There is no automatic download.</p>
+    </div>
+  </section>
+  <section class="card" id="pay">
+    <h2>Pay on Stripe</h2>
+    <p class="hint">Opens Stripe in a new tab. Come back and send the form if you have not.</p>
+    <p style="display:flex;flex-direction:column;gap:8px">
+      <a class="btn btn-primary" href="https://buy.stripe.com/3cIaEQ4R3cuw2S204XfjG00" target="_blank" rel="noopener noreferrer">Pay $100 — DIY guides</a>
+      <a class="btn btn-teal" href="https://buy.stripe.com/aFa8wIcjvgKM2S2191fjG01" target="_blank" rel="noopener noreferrer">Pay $249 — Done for you</a>
+      <a class="btn btn-ghost" href="https://buy.stripe.com/4gM00c1ERamo3W6g3VfjG02" target="_blank" rel="noopener noreferrer">Pay $149 — Upgrade</a>
+    </p>
+  </section>
+</main>
+<footer>
+  <p><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/refunds.html">Refunds</a> · <a href="/contact.html">Contact</a></p>
+  <p>Get App Verified is not Google and is not affiliated with Google.</p>
+  <p>Email <a href="mailto:getappverified@gmail.com">getappverified@gmail.com</a></p>
+</footer>
+<script src="/site.js"></script>
+</body>
+</html>

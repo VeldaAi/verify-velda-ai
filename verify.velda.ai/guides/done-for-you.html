@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Done for you — Get App Verified</title>
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="/">Get App Verified</a>
+  <a href="/#pricing">Pricing</a>
+  <a href="/intake.html">Start</a>
+  <a href="/guides/01-add-us.html">Add us</a>
+  <a href="/guides/done-for-you.html">Done for you</a>
+  <a href="/contact.html">Contact</a>
+</nav>
+<header class="hero">
+  <h1>Done for you: what happens next</h1>
+  <p>$249 once. We do the Google Cloud brand steps. You stay the project owner.</p>
+</header>
+<main class="wrap">
+  <section class="card">
+    <h2>What you do</h2>
+    <ol>
+      <li>Pay <a href="https://buy.stripe.com/aFa8wIcjvgKM2S2191fjG01" target="_blank" rel="noopener noreferrer">$249 on Stripe</a> (or <a href="https://buy.stripe.com/4gM00c1ERamo3W6g3VfjG02" target="_blank" rel="noopener noreferrer">$149</a> if you already bought the DIY guides).</li>
+      <li>Send the <a href="/intake.html">start form</a> from the same email when you can.</li>
+      <li>Add <code>getappverified@gmail.com</code> as <strong>OAuth Config Editor</strong>. Free steps: <a href="/guides/01-add-us.html">Add us</a>. Do not send your password. Do not make us Owner.</li>
+      <li>Reply only when we email you. We may ask you to add one DNS line, fix the homepage or privacy page, or share a test login or a short video. We send the exact clicks at that time. Those long guides are not on this public site.</li>
+      <li>When we email you that the work is finished, remove our access. Steps are below. Do them even if you are in a hurry later. The approval stays on your project.</li>
+    </ol>
+    <h2>What we do</h2>
+    <ul>
+      <li>We accept the invite, then work on the brand screen: app name, logo, homepage, privacy link, and the domain list.</li>
+      <li>You verify the domain yourself if we ask. Sign in with a Google account that is an Owner or an Editor of the Cloud project. Google’s sensitive-scope page allows either role. It does not require Owner only, and it is not a reason to make our email Owner.</li>
+      <li>We submit the brand check. If the app also needs a sensitive or restricted review, we tell you what Google still requires. A lab fee is extra and not included.</li>
+      <li>We email you at each change. We reply within 1 business day. Google’s own review clock is separate and is not ours.</li>
+    </ul>
+    <h2>How long Google takes</h2>
+    <p>These numbers are Google’s, not a promise from us. Google says they vary.</p>
+    <ul>
+      <li>Automatic brand check: often a few minutes after Verify Branding. A manual brand review usually takes 2–3 business days. Publish the result within 7 days or Google asks you to run it again. <a href="https://developers.google.com/identity/protocols/oauth2/production-readiness/brand-verification" target="_blank" rel="noopener noreferrer">Brand verification</a> (page updated 30 October 2026).</li>
+      <li>Sensitive scopes: up to 10 days on Google’s page. The demo video is part of that submission, not part of a non-sensitive scope such as <code>drive.file</code>. <a href="https://developers.google.com/identity/protocols/oauth2/production-readiness/sensitive-scope-verification" target="_blank" rel="noopener noreferrer">Sensitive scope verification</a>. Drive labels: <a href="https://developers.google.com/workspace/drive/api/guides/api-specific-auth" target="_blank" rel="noopener noreferrer">Drive API scopes</a>.</li>
+      <li>Restricted scopes: about 6 weeks in Google’s FAQ. A security assessment is a later step, not a fee we can promise or waive. <a href="https://support.google.com/cloud/answer/13463817" target="_blank" rel="noopener noreferrer">Google’s verification FAQ</a>, <a href="https://support.google.com/cloud/answer/13465431" target="_blank" rel="noopener noreferrer">Security assessment</a>, and <a href="https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification" target="_blank" rel="noopener noreferrer">restricted scope verification</a>.</li>
+    </ul>
+    <h2>Price and refund</h2>
+    <p>$249 once. Full refund of that fee if Google rejects the app. No refund if you do not reply for 30 days, or if you remove our access before we finish. Details: <a href="/refunds.html">Refunds</a>. We cannot guarantee approval.</p>
+    <div class="badbox">
+      <p>We never ask for your Google password, a card number, or a secret key. A few apps need a paid outside security check. If yours does, we quote it first. It is not inside the $249.</p>
+    </div>
+    <h2>Remove us when we say we are done</h2>
+    <p class="muted">About 3 minutes. Button names move. If you do not see the pencil or the trash icon, email us before you delete a whole row you do not recognise.</p>
+    <ol class="steps">
+      <li>
+        <p>Open <a href="https://console.cloud.google.com/iam-admin/iam" target="_blank" rel="noopener noreferrer">the IAM page</a>. Check the project name at the top is your app.</p>
+      </li>
+      <li>
+        <p>On the row for <code>getappverified@gmail.com</code>, click the pencil.</p>
+      </li>
+      <li>
+        <p>Remove the <strong>OAuth Config Editor</strong> role, then click <strong>Save</strong>. If an older note added Owner as well, remove that role too. The row should be gone, or have no role left for our email.</p>
+      </li>
+      <li>
+        <p>Only if you also added our email inside Search Console: open <a href="https://search.google.com/search-console/users" target="_blank" rel="noopener noreferrer">Search Console users</a>, pick your domain, and remove <code>getappverified@gmail.com</code>. If we were never added there, skip this.</p>
+      </li>
+      <li>
+        <p>Do not delete DNS records unless we email you the exact TXT value and say to delete that one line. Your own <code>google-site-verification=</code> line must stay, or your domain proof can break. If you are not sure, leave every DNS line alone and ask us.</p>
+      </li>
+    </ol>
+    <p>Email us <code>REMOVED — Project ID: ____</code> with a screenshot of the IAM page that no longer lists our email.</p>
+    <p>Removing a person: <a href="https://docs.cloud.google.com/iam/docs/granting-changing-revoking-access" target="_blank" rel="noopener noreferrer">Google IAM help</a>. Search Console users: <a href="https://support.google.com/webmasters/answer/7687615" target="_blank" rel="noopener noreferrer">Manage owners, users, and permissions</a>.</p>
+  </section>
+</main>
+<footer>
+  <p><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/refunds.html">Refunds</a> · <a href="/contact.html">Contact</a></p>
+  <p>Get App Verified is not Google and is not affiliated with Google.</p>
+</footer>
+</body>
+</html>

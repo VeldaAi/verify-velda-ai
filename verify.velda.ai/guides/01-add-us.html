@@ -1,92 +1,75 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Guide 01: Add Us to Your Google Project – Get App Verified</title>
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f4f6fb;color:#1d2433;line-height:1.55}
-header{background:#1a56db;color:#fff;padding:28px 20px;text-align:center}header h1{margin:0;font-size:24px}header p{margin:6px 0 0;opacity:.9;font-size:15px}
-main{max-width:720px;margin:-16px auto 40px;background:#fff;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.08);padding:28px 22px}
-.lead{font-size:16px;color:#5b6475;margin:0 0 22px}
-ol.steps{margin:0;padding:0;list-style:none;counter-reset:s}
-ol.steps>li{counter-increment:s;margin:0 0 28px;padding:0 0 0 48px;position:relative}
-ol.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:34px;height:34px;border-radius:50%;background:#1a56db;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center}
-ol.steps>li p{margin:0 0 10px}
-img.shot{display:block;width:100%;max-width:640px;height:auto;border:1px solid #dfe4ee;border-radius:10px;margin:8px 0}
-.warn{background:#fff8e6;border:1px solid #f0d78c;border-radius:8px;padding:8px 12px;font-size:14px;margin:8px 0 0}
-.done{background:#eef6ff;border:1px solid #c5d8f7;border-radius:10px;padding:14px 16px;margin:8px 0 24px}
-.mistakes{background:#f7f9fc;border:1px solid #dfe4ee;border-radius:10px;padding:14px 18px;margin:24px 0}
-.mistakes h2{margin:0 0 8px;font-size:16px}.mistakes ul{margin:0;padding-left:20px}
-.reply{background:#f0faf0;border:1px solid #b7e0b7;border-radius:10px;padding:14px 18px;margin:24px 0}
-.reply h2{margin:0 0 8px;font-size:16px}.reply pre{background:#fff;border:1px solid #dfe4ee;border-radius:8px;padding:12px;overflow:auto;font-size:14px}
-details{margin-top:20px;border:1px solid #dfe4ee;border-radius:10px;padding:12px 16px;background:#fafbfd}
-details summary{cursor:pointer;font-weight:600}details ul{padding-left:20px}
-a{color:#1a56db}code{background:#eef1f6;padding:1px 6px;border-radius:4px;font-size:0.95em}
-.back{display:inline-block;margin-bottom:16px;font-size:14px}
-footer{text-align:center;color:#5b6475;font-size:13px;padding:0 20px 40px}
-</style></head><body>
-<header>
-  <h1>Guide 01: Add Us to Your Google Project</h1>
-  <p>Your Google project = your app's settings area at Google. About 2 minutes.</p>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add us to your Google project — Get App Verified</title>
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="/">Get App Verified</a>
+  <a href="/#pricing">Pricing</a>
+  <a href="/intake.html">Start</a>
+  <a href="/guides/01-add-us.html">Add us</a>
+  <a href="/guides/done-for-you.html">Done for you</a>
+  <a href="/contact.html">Contact</a>
+</nav>
+<header class="hero">
+  <h1>Add us to your Google project</h1>
+  <p>About 2 minutes. You stay the owner. We never ask for your password.</p>
 </header>
-<main>
-  <a class="back" href="/">← Back to intake form</a>
-  <p class="lead">Follow these steps with the Google account that owns your app. When you're done, reply to us with the line at the bottom.</p>
-
-  <ol class="steps">
-    <li>
-      <p>Sign in with the Google account that owns your app, then open:</p>
-      <p><a href="https://console.cloud.google.com/iam-admin/iam" target="_blank" rel="noopener">https://console.cloud.google.com/iam-admin/iam</a></p>
-    </li>
-    <li>
-      <p>Click the <strong>project name</strong> at the top left and pick your app's project.</p>
-      <img class="shot" src="img/01-project-picker.png" alt="Project picker button at the top left of Google Cloud Console">
-    </li>
-    <li>
-      <p>In that list, copy your project's <strong>ID</strong> (looks like <code>my-app-123456</code>). Save it for your reply.</p>
-      <img class="shot" src="img/01-project-id.png" alt="Project ID column in the project picker">
-    </li>
-    <li>
-      <p>Click <strong>Grant access</strong>. In the <strong>New principals</strong> box (where you type an email), paste: <code>getappverified@gmail.com</code></p>
-      <img class="shot" src="img/02-grant-access.png" alt="Grant access button on the IAM page">
-    </li>
-    <li>
-      <p>Click <strong>Select a role</strong>, type <code>Owner</code>, and click <strong>Owner (Legacy)</strong>. It's fine that it says Legacy. Ignore the note about Admin.</p>
-      <img class="shot" src="img/03-owner-role.png" alt="Owner (Legacy) role selected">
-    </li>
-    <li>
-      <p>Click <strong>Save</strong>. If Google asks about sending an invitation, say yes.</p>
-      <p class="warn">Button label not confirmed — look for Save / Send invitation / Confirm.</p>
-    </li>
-  </ol>
-
-  <div class="done">That's it. We accept the invitation on our side. <strong>"Pending"</strong> is normal.</div>
-
-  <div class="mistakes">
-    <h2>Common mistakes</h2>
+<main class="wrap">
+  <section class="card">
+    <p>Do this only if you bought done-for-you, or you are about to. DIY buyers do not need to add us.</p>
+    <div class="warn">
+      <p><strong>Add OAuth Config Editor. Do not add Owner.</strong></p>
+      <p>Google does not require our email to be Owner. To prove a domain, Google’s sensitive-scope page says to use a Google account that is an <strong>Owner or an Editor</strong> of the Cloud project. That account should be yours. It does not have to be the only Owner, and it does not have to be our email.</p>
+      <p>Google’s permission list gives <code>oauthconfig.<wbr>verification.<wbr>submit</code> to the role named OAuth Config Editor. That is the smallest role we found that can edit the sign-in screen and submit the check. The broad Owner role can also delete the project and change billing. The broad Editor role can change most of the project. We do not need either of those for our email.</p>
+      <p>Google marks OAuth Config Editor as Beta. If the role box does not offer it, stop and email us. Do not switch to Owner unless we have confirmed the smaller role is missing and you agree in a reply. Source: <a href="https://docs.cloud.google.com/iam/docs/roles-permissions/oauthconfig" target="_blank" rel="noopener noreferrer">OAuthConfig roles</a> (page updated 4 November 2026).</p>
+    </div>
+    <p>This role can see OAuth client secrets stored in the project. That is still much smaller than Owner. Do not also email those secrets to us.</p>
+    <h2>Steps</h2>
+    <p class="muted">Google moves buttons. The words below match Google’s IAM help. If a word is missing, stop and email a screenshot of the whole screen. Do not click a nearby button that only sounds similar.</p>
+    <ol class="steps">
+      <li>
+        <p>Sign in as the Google account that owns the app. Open <a href="https://console.cloud.google.com/iam-admin/iam" target="_blank" rel="noopener noreferrer">the IAM page</a>.</p>
+      </li>
+      <li>
+        <p>At the top left, open the project picker. Select the app’s project. Copy the <strong>project ID</strong> (it looks like <code>my-app-123456</code>). You will paste it into the <a href="/intake.html">start form</a>.</p>
+      </li>
+      <li>
+        <p>Click <strong>Grant access</strong>. In the principals box, paste exactly:</p>
+        <p><code>getappverified@gmail.com</code></p>
+        <p>Paste it. Do not retype it.</p>
+      </li>
+      <li>
+        <p>Click <strong>Select a role</strong>. Type <code>OAuth Config Editor</code>. Pick <strong>OAuth Config Editor</strong>. Do not pick Owner, the broad project Editor role, Viewer, or a role with “Legacy” in the name. Your own account can stay Owner or Editor. That is separate from the role you give us.</p>
+      </li>
+      <li>
+        <p>Click <strong>Save</strong>. If Google asks to send an invitation, say yes. “Pending” is normal until we accept it.</p>
+      </li>
+    </ol>
+    <h2>Easy mistakes</h2>
     <ul>
-      <li>❌ Picking <strong>Viewer</strong>, <strong>Editor</strong>, <strong>Reader</strong>, or <strong>Writer</strong>. It must be <strong>Owner (Legacy)</strong>.</li>
-      <li>❌ Wrong project. Check the name at the top.</li>
-      <li>❌ Typing the email. Paste it.</li>
+      <li>Wrong project. Check the name in the top bar before you save.</li>
+      <li>Picking Owner, or the broad Editor role, for our email “to be safe”. Your own account can stay Owner or Editor. Our email should be OAuth Config Editor.</li>
+      <li>A typo in the email. Paste <code>getappverified@gmail.com</code>.</li>
     </ul>
-  </div>
-
-  <div class="reply">
-    <h2>Reply to us with:</h2>
-    <pre>DONE — Project ID: ____
-Google account that owns the project: ____</pre>
-    <p>📎 Attach a screenshot of the page showing <code>getappverified@gmail.com</code> as <strong>Owner</strong> (pending is fine).</p>
-  </div>
-
-  <details>
-    <summary>Details (optional)</summary>
-    <ul>
-      <li><strong>No Grant access button?</strong> You're signed in with an account that isn't an Owner. Switch to the account that owns the project.</li>
-      <li><strong>Never send us your password.</strong> We don't need it.</li>
-      <li><strong>The invitation:</strong> Google only lets someone become Owner through an email invitation they accept. Google sends it to <code>getappverified@gmail.com</code> and we accept it; you do nothing. Until then the page may say "Invitation sent. Pending acceptance."</li>
-      <li><strong>Why Owner?</strong> Google requires an Owner or Editor to verify your domain, and only Owners can submit verification. Google contacts Owners about it.</li>
-      <li>Google calls this page "IAM" (its people-and-permissions list).</li>
-      <li><strong>Removing us later:</strong> this page → pencil next to our email → <strong>Delete</strong>. Guide 05 walks you through it.</li>
-    </ul>
-  </details>
+    <h2>Email us this</h2>
+    <pre>ADDED — Project ID: [the project id]
+Role: OAuth Config Editor</pre>
+    <p>Attach a screenshot of the IAM row that shows <code>getappverified@gmail.com</code> and the role. Pending is fine. Do not send a password.</p>
+    <h2>When we are done</h2>
+    <p>We will email you to remove us. The clicks are on the <a href="/guides/done-for-you.html">done-for-you page</a>. You can remove us sooner any time. If you do that before we finish, the done-for-you refund exception applies.</p>
+    <h2>If there is no Grant access button</h2>
+    <p>You are probably signed in with an account that is not an owner of this project. Switch to the account that owns it. We will not ask you to hand that account’s password to us.</p>
+    <p>How Google describes granting a role: <a href="https://docs.cloud.google.com/iam/docs/granting-changing-revoking-access" target="_blank" rel="noopener noreferrer">Grant, change, and revoke access</a>.</p>
+  </section>
 </main>
-<footer>Get App Verified · <a href="/">verify.velda.ai</a></footer>
-</body></html>
+<footer>
+  <p><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/refunds.html">Refunds</a> · <a href="/contact.html">Contact</a></p>
+  <p>Get App Verified is not Google and is not affiliated with Google.</p>
+</footer>
+</body>
+</html>
