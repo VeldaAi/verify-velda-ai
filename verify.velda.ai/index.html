@@ -1,82 +1,107 @@
 <!DOCTYPE html>
-<!--
-  Get App Verified intake.
-  Formspree: https://formspree.io/f/xgaaqljw
-  Guide 01: https://verify.velda.ai/guides/01-add-us.html
--->
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Get App Verified – Start here</title>
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f4f6fb;color:#1d2433;line-height:1.5}
-header{background:#1a56db;color:#fff;padding:28px 20px;text-align:center}header h1{margin:0;font-size:28px}header p{margin:6px 0 0;opacity:.9}
-main{max-width:640px;margin:-16px auto 40px;background:#fff;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.08);padding:28px}
-label.q{display:block;font-weight:600;margin:20px 0 6px}.req{color:#c81e1e}.hint{font-size:13px;color:#5b6475;margin:-2px 0 6px}
-input[type=text],input[type=email],input[type=url],textarea{width:100%;padding:11px 12px;border:1px solid #cdd3df;border-radius:8px;font:inherit}
-textarea{min-height:90px}input:focus,textarea:focus{outline:2px solid #1a56db;border-color:#1a56db}
-.opts label{display:flex;gap:8px;align-items:center;padding:6px 0;font-weight:400}.opts input[type=text]{margin-top:4px}
-.terms{background:#f7f9fc;border:1px solid #dfe4ee;border-radius:10px;padding:14px 18px;margin-top:24px;font-size:14px}.terms ul{margin:6px 0;padding-left:20px}
-.err{color:#c81e1e;font-size:13px;display:none;margin-top:4px}.bad .err{display:block}.bad input[type=text],.bad input[type=email],.bad input[type=url]{border-color:#c81e1e}
-button{margin-top:24px;width:100%;padding:14px;border:0;border-radius:10px;background:#1a56db;color:#fff;font-size:17px;font-weight:600;cursor:pointer}button:hover{background:#1646b8}
-a{color:#1a56db}#thanks{display:none;text-align:center;padding:30px 0}#thanks h2{margin:0 0 8px}
-</style></head><body>
-<header><h1>Get App Verified</h1><p>Tell us about your app. It takes 3 minutes.</p></header>
-<main>
-<form id="f" action="https://formspree.io/f/xgaaqljw" method="POST" novalidate>
-<div class="fld" data-req><label class="q" for="name">Your name <span class="req">*</span></label><input type="text" id="name" name="name"><div class="err">Please type your name.</div></div>
-<div class="fld" data-req><label class="q" for="email">Your email <span class="req">*</span></label><input type="email" id="email" name="email"><div class="err">Please type a valid email.</div></div>
-<div class="fld" data-req><label class="q" for="app">App name <span class="req">*</span></label><p class="hint">Exactly as it shows on the Google sign-in screen.</p><input type="text" id="app" name="app_name"><div class="err">Please type your app name.</div></div>
-<div class="fld" data-req><label class="q" for="home">App homepage link <span class="req">*</span></label><input type="url" id="home" name="homepage_url" placeholder="https://"><div class="err">Please paste a link starting with https://</div></div>
-<div class="fld" data-req><label class="q" for="priv">Privacy policy link <span class="req">*</span></label><input type="url" id="priv" name="privacy_url" placeholder="https://"><div class="err">Please paste a link starting with https://</div></div>
-<div class="fld" data-req><label class="q" for="pid">Google Cloud project ID <span class="req">*</span></label><p class="hint">Find it at console.cloud.google.com, top left project picker.</p><input type="text" id="pid" name="project_id" placeholder="my-app-123456"><div class="err">Please type your project ID.</div></div>
-<div class="fld" id="data"><label class="q">Which Google data does your app use? <span class="req">*</span></label><div class="opts">
-<label><input type="checkbox" name="google_data" value="Sign-in only"> Sign-in only (name/email)</label>
-<label><input type="checkbox" name="google_data" value="Google Drive"> Google Drive</label>
-<label><input type="checkbox" name="google_data" value="Gmail"> Gmail</label>
-<label><input type="checkbox" name="google_data" value="Calendar"> Calendar</label>
-<label><input type="checkbox" name="google_data" value="Sheets/Docs"> Sheets / Docs</label>
-<label><input type="checkbox" name="google_data" value="Other" id="oth"> Other</label>
-<input type="text" name="google_data_other" id="othtxt" placeholder="What else?" style="display:none"></div><div class="err">Please tick at least one.</div></div>
-<div class="fld" id="plan"><label class="q">Plan <span class="req">*</span></label><div class="opts">
-<label><input type="radio" name="plan" value="Done-for-you $249"> Done-for-you – $249</label>
-<label><input type="radio" name="plan" value="DIY guides $100"> DIY guides – $100</label></div><div class="err">Please pick a plan.</div></div>
-<div class="fld" id="owner"><label class="q">Have you added getappverified@gmail.com as Owner? <span class="req">*</span></label><div class="opts">
-<label><input type="radio" name="added_owner" value="Yes"> Yes</label>
-<label><input type="radio" name="added_owner" value="Not yet"> Not yet – <a href="https://verify.velda.ai/guides/01-add-us.html" target="_blank">here is how (2 minutes)</a></label></div><div class="err">Please pick one.</div></div>
-<label class="q" for="notes">Anything else? (optional)</label><textarea id="notes" name="notes"></textarea>
-<div class="terms"><strong>Terms (short version)</strong><ul>
-<li>Done-for-you: full refund if Google rejects your app.</li>
-<li>No refund after 30 days with no reply from you, or if you remove our access early.</li>
-<li>DIY guide pack is final sale (no refunds).</li>
-<li>We can't guarantee Google will approve your app.</li></ul>
-<div class="fld" id="agree"><label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" name="agree_terms" value="yes"> I agree <span class="req">*</span></label><div class="err">Please tick "I agree".</div></div></div>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get App Verified</title>
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="/">Get App Verified</a>
+  <a href="#pricing">Pricing</a>
+  <a href="/intake.html">Start</a>
+  <a href="/guides/01-add-us.html">Add us</a>
+  <a href="/guides/done-for-you.html">Done for you</a>
+  <a href="/contact.html">Contact</a>
+</nav>
+<header class="hero">
+  <h1>Get your app ready for Google’s check</h1>
+  <p>We help with the Google sign-in screen: your app name, logo, homepage, and privacy link. We are not Google. Google decides yes or no. Paying us does not mean Google will approve the app.</p>
+</header>
+<main class="wrap">
+  <section class="card">
+    <h2>What this is, and what it is not</h2>
+    <p>Google runs more than one check. They are not the same thing.</p>
+    <ul>
+      <li><strong>Brand check.</strong> Google looks at the name, logo, homepage, and privacy link people see when they sign in with Google. This is the check these prices cover.</li>
+      <li><strong>Sensitive-scope check.</strong> If the app reads things like Calendar or sends Gmail, Google reviews that use as well. It takes longer. A short demo video is usually required. This is a different review from the brand check.</li>
+      <li><strong>Restricted-scope check.</strong> Broad access, such as all of Gmail or all of Drive, can also require a yearly security review by an outside lab (often called CASA). Google does not charge that lab fee. The lab does. <strong>That fee is not included</strong> in $100, $149, or $249. If your app needs it, we say so before any extra cost. We do not sign you up for a lab.</li>
+    </ul>
+    <p class="muted">Google’s own timing notes, which are not promises: the automatic brand check often finishes in a few minutes, and a person reviewing the brand usually takes 2–3 business days. A sensitive-scope review can take about 10 business days. A restricted-scope review is listed as about 6 weeks, plus the lab. Google says those times vary. Sources are linked on the <a href="/guides/done-for-you.html">done-for-you page</a>.</p>
+  </section>
 
-<div class="pay" style="margin-top:28px;padding:16px 18px;border:1px solid #dfe4ee;border-radius:10px;background:#f7f9fc">
-<strong>Pay (pick your plan)</strong>
-<p class="hint" style="margin:6px 0 12px">Opens Stripe checkout in a new tab. DIY is final sale.</p>
-<p style="display:flex;flex-direction:column;gap:8px;margin:0">
-<a href="https://buy.stripe.com/3cIaEQ4R3cuw2S204XfjG00" target="_blank" rel="noopener" style="display:block;text-align:center;padding:12px;border-radius:8px;background:#1a56db;color:#fff;text-decoration:none;font-weight:600">Pay $100 — DIY guides</a>
-<a href="https://buy.stripe.com/aFa8wIcjvgKM2S2191fjG01" target="_blank" rel="noopener" style="display:block;text-align:center;padding:12px;border-radius:8px;background:#0f766e;color:#fff;text-decoration:none;font-weight:600">Pay $249 — Done-for-you</a>
-<a href="https://buy.stripe.com/4gM00c1ERamo3W6g3VfjG02" target="_blank" rel="noopener" style="display:block;text-align:center;padding:12px;border-radius:8px;border:1px solid #1a56db;color:#1a56db;text-decoration:none;font-weight:600">Pay $149 — Upgrade to done-for-you</a>
-</p>
-</div>
+  <section class="card" id="pricing">
+    <h2>Prices</h2>
+    <p>All prices are US dollars, paid once on Stripe. We never see or store your card number.</p>
+    <div class="grid">
+      <article>
+        <p class="price">$100</p>
+        <h3>DIY guides</h3>
+        <p>You do every Google Cloud step yourself. After we confirm the Stripe payment, we email the guide pack to the email you used at Stripe. There is no download button and no instant delivery.</p>
+        <p>The $100 pack is final sale, except where the law gives you a refund right that cannot be waived.</p>
+        <p><a class="btn btn-primary" href="https://buy.stripe.com/3cIaEQ4R3cuw2S204XfjG00" target="_blank" rel="noopener noreferrer">Pay $100 — DIY guides</a></p>
+      </article>
+      <article>
+        <p class="price">$249</p>
+        <h3>Done for you</h3>
+        <p>You add our Google account with a small role. We do the brand steps in your project. You may still need to add one domain line, fix your homepage or privacy page, or make a demo if Google asks.</p>
+        <p>If Google rejects the app, we refund this fee. Two existing exceptions are on the <a href="/refunds.html">refunds page</a>. Outside lab fees are not included.</p>
+        <p><a class="btn btn-teal" href="https://buy.stripe.com/aFa8wIcjvgKM2S2191fjG01" target="_blank" rel="noopener noreferrer">Pay $249 — Done for you</a></p>
+      </article>
+      <article>
+        <p class="price">$149</p>
+        <h3>Upgrade from DIY</h3>
+        <p>Already paid $100 for the guides and now want us to do the work? Pay the difference here, then send the <a href="/intake.html">start form</a> and say you already bought DIY.</p>
+        <p>The original $100 stays final sale. The $149 follows the done-for-you refund rule.</p>
+        <p><a class="btn btn-ghost" href="https://buy.stripe.com/4gM00c1ERamo3W6g3VfjG02" target="_blank" rel="noopener noreferrer">Pay $149 — Upgrade</a></p>
+      </article>
+    </div>
+  </section>
 
-<button type="submit">Send</button>
-</form>
-<div id="thanks"><h2>Thanks! We got it.</h2><p>We reply within 1 business day.</p></div>
+  <section class="card">
+    <h2>How to buy</h2>
+    <ol>
+      <li>Click the Stripe button for your plan. The card payment happens on Stripe.</li>
+      <li>Open the <a href="/intake.html">start form</a> and tell us the app name, homepage, privacy-policy link, and Google Cloud project ID. Use the same email you used at Stripe if you can, so we can match the payment.</li>
+      <li>We confirm the payment ourselves. Nothing on this website sends the guide pack automatically.</li>
+      <li>For DIY, a person emails the pack to the Stripe purchase email after that confirmation. We do not promise a clock time for that email.</li>
+      <li>For done-for-you, we email the first step after the payment and the form are both in. The free first step, adding our account, is also on <a href="/guides/01-add-us.html">this page</a>.</li>
+    </ol>
+    <p class="warn">Do not send a Google password, a card number, an API key, a token, or a client secret. The form will not ask for them. If a message asks you for a password, it is not from us.</p>
+  </section>
+
+  <section class="card">
+    <h2>What you need before we can start</h2>
+    <ul>
+      <li>A Google Cloud project, and its project ID.</li>
+      <li>A public homepage on a domain you control, starting with https://. A login-only page is not enough. The page should say what the app does, in the same app name people see on the Google sign-in screen.</li>
+      <li>A privacy policy on that same domain, linked from the homepage. It must say what Google data the app uses, and how you use, store, share, and delete it.</li>
+      <li>The Google account that owns the project. You stay the owner. For done-for-you, you add <a href="mailto:getappverified@gmail.com">getappverified@gmail.com</a> as <strong>OAuth Config Editor</strong>, not Owner. Steps: <a href="/guides/01-add-us.html">Add us</a>.</li>
+    </ul>
+    <p><a class="btn btn-primary" href="/intake.html">Go to the start form</a></p>
+  </section>
+
+  <section class="card">
+    <h2>What each plan gives you</h2>
+    <h3>$100 DIY</h3>
+    <ul>
+      <li>A written pack of short steps: smallest Google access, domain proof, homepage and privacy page, branding, the access list, the demo video when you need one, submit, and how to answer Google’s emails.</li>
+      <li>You click every button. We do not join your project.</li>
+    </ul>
+    <h3>$249 done for you</h3>
+    <ul>
+      <li>We edit the Google sign-in branding and submit the brand check after you add us.</li>
+      <li>A public onboarding page: <a href="/guides/done-for-you.html">what happens next</a>, including how to remove us at the end.</li>
+      <li>If we need you to touch DNS, your website, or a demo, we email that step. Those click-by-click pages are not published here, because this site cannot hide paid files.</li>
+    </ul>
+    <p class="muted">Guide 01 stays free so you can add us, or check the role, before you pay. Both public guides are listed on <a href="/guides/">the guides page</a>.</p>
+  </section>
 </main>
-<script>
-var f=document.getElementById('f'),oth=document.getElementById('oth'),ot=document.getElementById('othtxt');
-oth.onchange=function(){ot.style.display=oth.checked?'block':'none'};
-function mark(el,ok){el.classList.toggle('bad',!ok);return ok}
-f.addEventListener('submit',function(e){e.preventDefault();var ok=true,first=null;
-document.querySelectorAll('[data-req]').forEach(function(d){var i=d.querySelector('input'),v=i.value.trim(),g=!!v;
-if(i.type=='email')g=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);if(i.type=='url')g=/^https?:\/\/\S+\.\S+/.test(v);
-if(!mark(d,g)){ok=false;first=first||d}});
-[['data','[name=google_data]:checked'],['plan','[name=plan]:checked'],['owner','[name=added_owner]:checked'],['agree','[name=agree_terms]:checked']].forEach(function(p){var d=document.getElementById(p[0]);if(!mark(d,!!f.querySelector(p[1]))){ok=false;first=first||d}});
-if(oth.checked&&!ot.value.trim()){mark(document.getElementById('data'),false);ok=false;first=first||document.getElementById('data')}
-if(!ok){first.scrollIntoView({behavior:'smooth',block:'center'});return}
-var done=function(){f.style.display='none';document.getElementById('thanks').style.display='block';window.scrollTo(0,0)};
-if(f.action.indexOf('%7B%7B')>-1||f.action.indexOf('{{')>-1){done();return}
-fetch(f.action,{method:'POST',body:new FormData(f),headers:{Accept:'application/json'}}).then(function(r){if(r.ok)done();else alert('Sorry, something went wrong. Please try again.')}).catch(function(){alert('Sorry, could not send. Check your internet and try again.')});
-});
-</script></body></html>
+<footer>
+  <p><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/refunds.html">Refunds</a> · <a href="/contact.html">Contact</a></p>
+  <p>Get App Verified is not Google and is not affiliated with Google. Google decides whether an app is approved.</p>
+  <p>Email <a href="mailto:getappverified@gmail.com">getappverified@gmail.com</a></p>
+</footer>
+</body>
+</html>
