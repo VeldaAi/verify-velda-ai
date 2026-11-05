@@ -56,7 +56,7 @@ class LinkParser(HTMLParser):
             self.errors.append("password input")
         if tag == "form":
             action = attr.get("action", "")
-            if action and "formspree.io/f/xgaaqljw" not in action and not action.startswith("#"):
+            if action and "formspree.io/f/xdeejbnl" not in action and not action.startswith("#"):
                 self.errors.append(f"unexpected form action {action}")
 
 
