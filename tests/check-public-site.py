@@ -8,6 +8,7 @@ from pathlib import Path
 from urllib.parse import urljoin, urlparse
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 import threading
+import urllib.error
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1] / "verify.velda.ai"
@@ -45,6 +46,40 @@ GUIDE_PNGS = [
     "guides/img/04-oauth-config-editor.png",
 ]
 PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
+ACCESS_PHRASE = (
+    "Once Stripe confirms your payment, we email a personal welcome from verify@velda.ai "
+    "with a private password-protected link. The link stays active for 4 hours and works on up to 2 IP addresses."
+)
+ACCESS_PAGES = [
+    "index.html",
+    "intake.html",
+    "terms.html",
+    "refunds.html",
+    "privacy.html",
+    "contact.html",
+    "guides/index.html",
+    "guides/01-add-us.html",
+    "guides/done-for-you.html",
+]
+STALE = [
+    "by hand",
+    "have not confirmed",
+    "does not mean the message is already in our inbox",
+    "does not send the guide pack by itself",
+    "Nothing on this site sends",
+    "after a person confirms",
+    "after a person sees",
+    "There is no automatic download",
+    "This page does not email the guide pack",
+]
+HIDDEN_PACKS = [
+    "/diy/",
+    "/dfy/",
+    "/get-app-verified-diy-pack.pdf",
+    "/get-app-verified-diy-pack.zip",
+    "/get-app-verified-dfy-pack.pdf",
+    "/get-app-verified-dfy-pack.zip",
+]
 
 
 class LinkParser(HTMLParser):
@@ -123,12 +158,24 @@ def main():
         sys.exit("New principals step missing")
     if "active Google Account" not in guide or "Do not switch to Owner" not in guide:
         sys.exit("troubleshooting line missing")
-    intake = (ROOT / "intake.html").read_text(encoding="utf-8")
-    privacy = (ROOT / "privacy.html").read_text(encoding="utf-8")
-    if "does not mean the message is already in our inbox" not in intake:
-        sys.exit("intake lost the unconfirmed Formspree note")
-    if "have not confirmed that Formspree is delivering" not in privacy:
-        sys.exit("privacy lost the unconfirmed Formspree note")
+    for name in ACCESS_PAGES:
+        page = (ROOT / name).read_text(encoding="utf-8")
+        if ACCESS_PHRASE not in page:
+            sys.exit(f"{name} does not explain the private 4-hour link")
+    for needle in STALE:
+        if needle in text:
+            sys.exit(f"public site still has a stale fulfillment line: {needle}")
+    for name in ("intake.html", "privacy.html", "contact.html"):
+        page = (ROOT / name).read_text(encoding="utf-8")
+        if "delivers a copy to verify@velda.ai" not in page:
+            sys.exit(f"{name} does not say Formspree delivers to verify@velda.ai")
+    leaked = [
+        p.relative_to(ROOT).as_posix()
+        for p in ROOT.rglob("*")
+        if p.is_file() and p.suffix.lower() in {".pdf", ".zip"}
+    ]
+    if leaked:
+        sys.exit("paid pack file in the public site: " + ", ".join(leaked))
 
     class Handler(SimpleHTTPRequestHandler):
         def __init__(self, *args, **kwargs):
@@ -191,6 +238,16 @@ def main():
                 continue
             clean = joined.split("#")[0]
             queue.append(clean)
+    for rel in HIDDEN_PACKS:
+        url = urljoin(base, rel.lstrip("/"))
+        try:
+            with urllib.request.urlopen(url, timeout=5) as resp:
+                failures.append(f"{rel} status {resp.status}, want 404")
+        except urllib.error.HTTPError as exc:
+            if exc.code != 404:
+                failures.append(f"{rel} status {exc.code}, want 404")
+        except Exception as exc:
+            failures.append(f"{rel} {exc}")
     httpd.shutdown()
     if failures:
         sys.exit("link failures:\n" + "\n".join(failures))

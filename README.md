@@ -1,6 +1,6 @@
 # verify.velda.ai
 
-Public sales site for Get App Verified. The paid DIY click-path is **not** in this repository. This site cannot hide a file from someone who knows the URL, so the $100 pack stays off the server and is emailed by hand after a Stripe payment is confirmed.
+Public sales site for Get App Verified. The paid guides are **not** in this repository. After Stripe confirms a payment, the buyer gets a personal email from `verify@velda.ai` with a private password-protected link. The link stays active for 4 hours and works on up to 2 IP addresses.
 
 Prices on the site:
 
@@ -30,8 +30,9 @@ That script:
 2. If `verify-site` already owns 8094, it updates that service in place.
 3. It saves a backup under `/var/backups/verify-site/<timestamp>/`.
 4. It copies the site to `/var/www/verify.velda.ai` and restarts **only** `verify-site`.
-5. It copies `verify.yml` to `/docker/traefik/config/verify.yml`. Traefik is not restarted. Its file provider reloads the file.
-6. It does not edit other units, other Traefik files, or other people's ports (8091 and 8092 stay untouched).
+5. It copies `verify.yml` to `/docker/traefik/config/verify.yml`. Traefik is not restarted. Its file provider reloads the file. `/api/stripe/` and `/access/` go to `127.0.0.1:8095`. Everything else on `verify.velda.ai` stays on `127.0.0.1:8094`.
+6. If user `quizmynotes` or `/home/quizmynotes/verify-fulfill` exists, it copies `fulfill/verify_fulfill.py` and `fulfill/pdf_stamp.py` into that directory. It does not replace `fulfill.env`, `packs/`, `grants.db`, or `sent.db`.
+7. It does not edit other people's ports. Leave `8090`–`8093` alone.
 
 Check, on the server:
 
@@ -54,10 +55,21 @@ sudo bash install-verify.sh --rollback
 ```bash
 bash tests/test-install.sh
 python3 tests/check-public-site.py
+python3 -m unittest discover -s tests
 ```
 
 The installer test uses a scratch directory and a fake `systemctl`. It does not bind port 8094 and does not change the real host.
 
 ## Paid pack
 
-Do not copy the paid guides into `verify.velda.ai/` or into this git repo. Deliver them from the private pack you were given, by email, after you can see the Stripe payment. There is no download button because none is implemented.
+Do not copy the paid guides into `verify.velda.ai/` or into this git repo. On the server they live only under `/home/quizmynotes/verify-fulfill/packs/` (`diy/`, `dfy/`, and the two PDFs). The public site must keep returning 404 for `/diy/`, `/dfy/`, and the pack filenames.
+
+`fulfill/verify_fulfill.py` listens on `127.0.0.1:8095`. Stripe should send `checkout.session.completed` to `https://verify.velda.ai/api/stripe/webhook`. Only the three Get App Verified Payment Links are fulfilled. A paid session gets one email, with a link `https://verify.velda.ai/access/<token>` and a generated password. The password is stored only as a salted PBKDF2 hash. The link lasts 4 hours and accepts at most 2 IP addresses. The PDF download is watermarked with the buyer's email and Stripe session id.
+
+Secrets go in `/home/quizmynotes/verify-fulfill/fulfill.env` (see `fulfill/fulfill.env.example`). To mint a pass by hand:
+
+```bash
+python3 /home/quizmynotes/verify-fulfill/verify_fulfill.py mint --plan diy_100 --email buyer@example.com --name "Ada"
+```
+
+Add `--send-email` to deliver that pass through SMTP. The service unit is `fulfill/verify-fulfill.service`.

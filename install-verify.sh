@@ -12,7 +12,10 @@
 #   4. Writes and restarts ONLY systemd unit verify-site (127.0.0.1:8094).
 #   5. Copies verify.yml into /docker/traefik/config/ and does NOT restart Traefik.
 #   6. Checks http://127.0.0.1:8094/ . On failure, restores the backup.
-#   7. Polls https://verify.velda.ai/ . A failed poll does not pretend the public site is confirmed.
+#   7. If quizmynotes (or VERIFY_FULFILL_DIR in a test) is present, copies the
+#      fulfillment program into place. It does not replace fulfill.env, packs/,
+#      grants.db, or sent.db, and it does not restart Traefik.
+#   8. Polls https://verify.velda.ai/ . A failed poll does not pretend the public site is confirmed.
 #
 # Test runs set VERIFY_TEST=1 and VERIFY_PREFIX to a scratch directory.
 # Those variables are ignored unless VERIFY_TEST=1. Do not set VERIFY_TEST on the server.
@@ -233,6 +236,83 @@ copy_traefik() {
   fi
 }
 
+fulfill_port_taken_by_other() {
+  if ! ss -ltn 2>/dev/null | grep -E -q '[:.]8095([^0-9]|$)'; then
+    return 1
+  fi
+  if ! systemctl is-active --quiet verify-fulfill; then
+    return 0
+  fi
+  local pid
+  pid="$(systemctl show -p MainPID --value verify-fulfill 2>/dev/null || true)"
+  case "$pid" in
+    ""|0|*[!0-9]*) return 0 ;;
+  esac
+  if ss -ltnp 2>/dev/null | grep -E '[:.]8095([^0-9]|$)' | grep -q "pid=${pid},"; then
+    return 1
+  fi
+  return 0
+}
+
+install_fulfill() {
+  local dest_dir="/home/quizmynotes/verify-fulfill"
+  local do_chown=0
+  if [ "${VERIFY_TEST:-}" = "1" ]; then
+    if [ -z "${VERIFY_FULFILL_DIR:-}" ]; then
+      return 0
+    fi
+    dest_dir="$VERIFY_FULFILL_DIR"
+  else
+    local user_ok=0
+    if id quizmynotes >/dev/null 2>&1; then
+      user_ok=1
+    fi
+    if [ ! -d "$dest_dir" ] && [ "$user_ok" != "1" ]; then
+      echo "    fulfill: no quizmynotes user and no $dest_dir — skipped"
+      return 0
+    fi
+    do_chown=$user_ok
+  fi
+  local src
+  for src in "$HERE/fulfill/verify_fulfill.py" "$HERE/fulfill/pdf_stamp.py"; do
+    if [ ! -f "$src" ]; then
+      echo "Missing $src" >&2
+      return 1
+    fi
+  done
+  mkdir -p "$dest_dir"
+  cp -a "$HERE/fulfill/verify_fulfill.py" "$dest_dir/verify_fulfill.py"
+  cp -a "$HERE/fulfill/pdf_stamp.py" "$dest_dir/pdf_stamp.py"
+  chmod 755 "$dest_dir/verify_fulfill.py" "$dest_dir/pdf_stamp.py"
+  if [ "$do_chown" = "1" ]; then
+    chown quizmynotes:quizmynotes "$dest_dir/verify_fulfill.py" "$dest_dir/pdf_stamp.py"
+    chown quizmynotes:quizmynotes "$dest_dir"
+  fi
+  echo "    updated $dest_dir/verify_fulfill.py"
+  echo "    left fulfill.env, packs/, grants.db, and sent.db unchanged"
+  if [ "${VERIFY_TEST:-}" = "1" ] || [ "$do_chown" != "1" ]; then
+    return 0
+  fi
+  if [ -f "$HERE/fulfill/verify-fulfill.service" ] && [ -d "$UNIT_DIR" ]; then
+    cp -a "$HERE/fulfill/verify-fulfill.service" "$UNIT_DIR/verify-fulfill.service"
+    systemctl daemon-reload || true
+  fi
+  if fulfill_port_taken_by_other; then
+    echo "    port 8095 is in use by another program. verify-fulfill was not started."
+    echo "    Traefik was not restarted."
+    return 0
+  fi
+  if ! systemctl enable verify-fulfill; then
+    echo "    warning: could not enable verify-fulfill. Traefik was not restarted."
+    return 0
+  fi
+  if ! systemctl restart verify-fulfill; then
+    echo "    warning: verify-fulfill did not restart. Traefik was not restarted."
+    return 0
+  fi
+  echo "    verify-fulfill is enabled on 127.0.0.1:8095. Traefik was not restarted."
+}
+
 local_health() {
   local i code="000"
   if [ "${VERIFY_TEST:-}" = "1" ] && [ "${VERIFY_FORCE_HEALTH_FAIL:-}" = "1" ]; then
@@ -306,8 +386,8 @@ if port_is_listening; then
     echo "FATAL: port $PORT is already in use, and it is not verify-site." >&2
     ss -ltnp 2>/dev/null | grep -E "[:.]${PORT}([^0-9]|$)" >&2 || true
     echo "Nothing was changed. This script will not stop another program, and it will not" >&2
-    echo "switch ports. Leave 8091 and 8092 alone. Fix the listener, or set a new port in" >&2
-    echo "BOTH this script and verify.yml only if you are sure the new port is free." >&2
+    echo "switch ports. Leave 8090, 8091, 8092, and 8093 alone. Fix the listener, or set a" >&2
+    echo "new port in BOTH this script and verify.yml only if you are sure the new port is free." >&2
     exit 1
   fi
 else
@@ -343,6 +423,8 @@ echo "    local  http://127.0.0.1:$PORT/  -> $code"
 if [ "$code" != "200" ]; then
   die "Local check failed (HTTP $code)."
 fi
+
+install_fulfill
 
 if [ "${VERIFY_TEST:-}" = "1" ]; then
   echo

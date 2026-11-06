@@ -140,7 +140,15 @@ test "$(cat "$PREFIX2/docker/traefik/config/other.yml")" = "LEAVE-ME"
 echo "ok: other traefik file untouched"
 grep -q 'Host(`verify.velda.ai`)' "$PREFIX2/docker/traefik/config/verify.yml"
 grep -q '127.0.0.1:8094' "$PREFIX2/docker/traefik/config/verify.yml"
-echo "ok: route file keeps backticks and 8094"
+grep -q '127.0.0.1:8095' "$PREFIX2/docker/traefik/config/verify.yml"
+grep -q 'priority: 100' "$PREFIX2/docker/traefik/config/verify.yml"
+grep -q 'PathPrefix(`/api/stripe/`)' "$PREFIX2/docker/traefik/config/verify.yml"
+grep -q 'PathPrefix(`/access/`)' "$PREFIX2/docker/traefik/config/verify.yml"
+if grep -q '/dl/' "$PREFIX2/docker/traefik/config/verify.yml"; then
+  echo "route file still publishes a static download path" >&2
+  exit 1
+fi
+echo "ok: route file keeps the static site and the access pass"
 grep -q "http.server $PORT2" "$UNIT"
 echo "ok: unit listens on the sandbox port"
 
@@ -172,6 +180,34 @@ if curl -fsS "http://127.0.0.1:$PORT2/" | grep -q 'SHOULD-NOT-STICK'; then
   exit 1
 fi
 echo "ok: failed health check restored the previous page"
+
+if grep -E -q 'systemctl (restart|stop|kill).*[Tt]raefik|docker (restart|kill) traefik' "$INSTALL"; then
+  echo "installer restarts Traefik" >&2
+  exit 1
+fi
+echo "ok: installer does not restart Traefik"
+
+FUL="$TMP/fulfill-home"
+mkdir -p "$FUL/packs"
+printf 'SECRET-ENV\n' >"$FUL/fulfill.env"
+printf 'DB-SENTINEL' >"$FUL/grants.db"
+printf 'OLD-DB' >"$FUL/sent.db"
+printf 'PACK-SENTINEL' >"$FUL/packs/keep.txt"
+export VERIFY_FULFILL_DIR="$FUL"
+bash "$INSTALL"
+cmp "$ROOT/fulfill/verify_fulfill.py" "$FUL/verify_fulfill.py"
+cmp "$ROOT/fulfill/pdf_stamp.py" "$FUL/pdf_stamp.py"
+test "$(stat -c %a "$FUL/verify_fulfill.py")" = "755"
+test "$(stat -c %a "$FUL/pdf_stamp.py")" = "755"
+printf 'SECRET-ENV\n' | cmp - "$FUL/fulfill.env"
+printf 'DB-SENTINEL' | cmp - "$FUL/grants.db"
+printf 'OLD-DB' | cmp - "$FUL/sent.db"
+printf 'PACK-SENTINEL' | cmp - "$FUL/packs/keep.txt"
+bash "$INSTALL"
+printf 'SECRET-ENV\n' | cmp - "$FUL/fulfill.env"
+printf 'PACK-SENTINEL' | cmp - "$FUL/packs/keep.txt"
+echo "ok: fulfill program installed without touching secrets or packs"
+unset VERIFY_FULFILL_DIR
 
 echo
 echo "installer sandbox tests passed"

@@ -1,1 +1,8 @@
 *.tar.gz
+fulfill.env
+grants.db
+sent.db
+*.pdf
+*.zip
+__pycache__/
+*.pyc

@@ -2,8 +2,8 @@
 # /docker/traefik/config/verify.yml. Traefik's file provider watches that directory,
 # so NO restart is needed (and none should be done).
 #
-# Port updated to 8094 on 2026-11-05: 8091 and 8092 are both taken on this host
-# (8092 is Reviva QA's rangeserver.py). Everything else is as supplied by Jason.
+# verify-site stays on 127.0.0.1:8094. Paid fulfillment stays on 127.0.0.1:8095.
+# Ports 8090–8093 belong to other programs on this host and are not used here.
 
 http:
   routers:
@@ -11,6 +11,14 @@ http:
       rule: "Host(`verify.velda.ai`)"
       entryPoints: [websecure]
       service: verify
+      tls:
+        certResolver: letsencrypt
+      middlewares: [verify-headers]
+    verify-fulfill:
+      rule: "Host(`verify.velda.ai`) && (PathPrefix(`/api/stripe/`) || PathPrefix(`/access/`))"
+      priority: 100
+      entryPoints: [websecure]
+      service: verify-fulfill
       tls:
         certResolver: letsencrypt
       middlewares: [verify-headers]
@@ -24,3 +32,8 @@ http:
         passHostHeader: true
         servers:
           - url: "http://127.0.0.1:8094"
+    verify-fulfill:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://127.0.0.1:8095"
