@@ -46,6 +46,9 @@ footer p{margin:0 0 8px}
 ol.steps{list-style:none;padding:0;margin:0;counter-reset:s}
 ol.steps>li{counter-increment:s;position:relative;padding:0 0 18px 48px}
 ol.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:34px;height:34px;border-radius:50%;background:#1a56db;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
+figure.shot{margin:10px 0 6px}
+figure.shot img{display:block;width:100%;max-width:100%;height:auto;background:#fff;border:1px solid #b7c0d0;border-radius:10px;box-shadow:0 1px 2px rgba(29,36,51,.06)}
+figure.shot figcaption{margin:8px 2px 0;font-size:14px;line-height:1.45;color:#3d4654}
 code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 code{background:#eef1f6;padding:1px 6px;border-radius:4px}
 pre{background:#f7f9fc;border:1px solid #e2e7f0;border-radius:8px;padding:12px;overflow:auto;font-size:14px}
