@@ -1,0 +1,18 @@
+[Unit]
+Description=Get App Verified Stripe fulfillment
+After=network.target
+
+[Service]
+Type=simple
+User=quizmynotes
+Group=quizmynotes
+WorkingDirectory=/home/quizmynotes/verify-fulfill
+EnvironmentFile=-/home/quizmynotes/verify-fulfill/fulfill.env
+ExecStart=/usr/bin/python3 /home/quizmynotes/verify-fulfill/verify_fulfill.py
+Restart=always
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
