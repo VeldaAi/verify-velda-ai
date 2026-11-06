@@ -12,7 +12,7 @@ Stripe and the intake form are linked from the pages. Card numbers stay on Strip
 
 ## What is public
 
-`verify.velda.ai/` is the whole public site: home, start form, privacy, terms, refunds, contact, Guide 01 (add `getappverified@gmail.com` as OAuth Config Editor), and the done-for-you onboarding page (including how to remove access).
+`verify.velda.ai/` is the whole public site: home, start form, privacy, terms, refunds, contact, Guide 01 (add `verify@velda.ai` as OAuth Config Editor), and the done-for-you onboarding page (including how to remove access).
 
 ## Update an existing server
 

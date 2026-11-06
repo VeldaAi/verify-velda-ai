@@ -83,9 +83,9 @@
       headers: { Accept: "application/json" }
     }).then(function (r) {
       if (r.ok) done();
-      else window.alert("Sorry, the form did not send. Please email getappverified@gmail.com.");
+      else window.alert("Sorry, the form did not send. Please email verify@velda.ai.");
     }).catch(function () {
-      window.alert("Sorry, the form did not send. Check your connection and try again, or email getappverified@gmail.com.");
+      window.alert("Sorry, the form did not send. Check your connection and try again, or email verify@velda.ai.");
     });
   });
 })();

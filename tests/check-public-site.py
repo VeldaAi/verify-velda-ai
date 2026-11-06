@@ -38,6 +38,13 @@ REQUIRED_PAGES = [
     "site.css",
     "site.js",
 ]
+GUIDE_PNGS = [
+    "guides/img/01-project-picker.png",
+    "guides/img/02-project-id.png",
+    "guides/img/03-grant-access.png",
+    "guides/img/04-oauth-config-editor.png",
+]
+PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
 
 
 class LinkParser(HTMLParser):
@@ -64,11 +71,19 @@ def main():
     missing = [p for p in REQUIRED_PAGES if not (ROOT / p).is_file()]
     if missing:
         sys.exit("missing files: " + ", ".join(missing))
-    pngs = list(ROOT.rglob("*.png"))
-    if pngs:
-        sys.exit("public site should not ship screenshots: " + ", ".join(map(str, pngs)))
+    pngs = sorted(p.relative_to(ROOT).as_posix() for p in ROOT.rglob("*.png"))
+    if pngs != sorted(GUIDE_PNGS):
+        sys.exit("public png set must be the four guide images, found: " + ", ".join(pngs))
+    for name in GUIDE_PNGS:
+        raw = (ROOT / name).read_bytes()
+        if not raw.startswith(PNG_MAGIC) or len(raw) < 24 or raw[12:16] != b"IHDR":
+            sys.exit(f"bad png header: {name}")
 
-    text = "\n".join((ROOT / p).read_text(encoding="utf-8") for p in REQUIRED_PAGES if p.endswith((".html", ".js")))
+    parts = []
+    for path in sorted(ROOT.rglob("*")):
+        if path.is_file() and path.suffix.lower() != ".png":
+            parts.append(path.read_text(encoding="utf-8"))
+    text = "\n".join(parts)
     for needle in FORBIDDEN:
         if needle in text:
             sys.exit(f"public site contains paid or stale text: {needle}")
@@ -77,12 +92,43 @@ def main():
     for link in STRIPE:
         if text.count(link) < 2:
             sys.exit(f"stripe link missing on home and intake: {link}")
-    if "getappverified@gmail.com" not in text:
-        sys.exit("contact email missing")
+    lowered = text.lower()
+    if "getappverified@gmail.com" in lowered:
+        sys.exit("old support email still present")
+    if "xgaaqljw" in lowered:
+        sys.exit("old form id still present")
+    if "verify@velda.ai" not in text:
+        sys.exit("verify@velda.ai missing")
+    if "formspree.io/f/xdeejbnl" not in text:
+        sys.exit("formspree endpoint missing")
     if "OAuth Config Editor" not in text:
         sys.exit("least-privilege role missing")
     if "We are not Google" not in text and "not Google" not in text:
         sys.exit("missing not-Google line")
+
+    guide = (ROOT / "guides/01-add-us.html").read_text(encoding="utf-8")
+    img_tags = re.findall(r"<img\b[^>]*>", guide, flags=re.IGNORECASE)
+    if len(img_tags) != 4:
+        sys.exit(f"01-add-us.html should contain 4 img tags, found {len(img_tags)}")
+    srcs = []
+    for tag in img_tags:
+        match = re.search(r"""src\s*=\s*["']([^"']+)["']""", tag, re.IGNORECASE)
+        if not match:
+            sys.exit(f"img tag missing src: {tag}")
+        srcs.append(match.group(1))
+    for name in GUIDE_PNGS:
+        if "/" + name not in srcs:
+            sys.exit(f"guide is missing img src /{name}")
+    if "New principals" not in guide:
+        sys.exit("New principals step missing")
+    if "active Google Account" not in guide or "Do not switch to Owner" not in guide:
+        sys.exit("troubleshooting line missing")
+    intake = (ROOT / "intake.html").read_text(encoding="utf-8")
+    privacy = (ROOT / "privacy.html").read_text(encoding="utf-8")
+    if "does not mean the message is already in our inbox" not in intake:
+        sys.exit("intake lost the unconfirmed Formspree note")
+    if "have not confirmed that Formspree is delivering" not in privacy:
+        sys.exit("privacy lost the unconfirmed Formspree note")
 
     class Handler(SimpleHTTPRequestHandler):
         def __init__(self, *args, **kwargs):
@@ -101,6 +147,8 @@ def main():
     for path in REQUIRED_PAGES:
         if path.endswith(".html"):
             queue.append(urljoin(base, path))
+    for name in GUIDE_PNGS:
+        queue.append(urljoin(base, name))
     failures = []
     while queue:
         url = queue.pop()
@@ -117,6 +165,10 @@ def main():
             continue
         if status != 200:
             failures.append(f"{url} status {status}")
+            continue
+        if url.endswith(".png"):
+            if not body.startswith(PNG_MAGIC) or len(body) < 24 or body[12:16] != b"IHDR":
+                failures.append(f"{url} is not a valid PNG")
             continue
         if "text/html" not in ctype and not url.endswith((".css", ".js", ".html", "/")):
             continue
