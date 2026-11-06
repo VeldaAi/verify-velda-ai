@@ -17,7 +17,7 @@
 </nav>
 <header class="hero">
   <h1>Start here</h1>
-  <p>Tell us about the app. About 3 minutes. Then pay on Stripe if you have not already.</p>
+  <p>Tell us about the app. Branding questions take about 3 minutes. If the app uses more than sign-in, a few more questions open up. Then pay on Stripe if you have not already.</p>
 </header>
 <main class="wrap">
   <section class="card">
@@ -27,6 +27,7 @@
     </div>
     <form id="f" action="https://formspree.io/f/xdeejbnl" method="POST" novalidate>
       <input type="hidden" name="_subject" value="Get App Verified intake">
+      <input type="hidden" name="verification_track" id="verification_track" value="Stage 1 only (Fast Branding)">
       <div class="fld" data-req="name">
         <label class="q" for="name">Your name <span class="req">*</span></label>
         <input type="text" id="name" name="name" autocomplete="name" maxlength="200">
@@ -56,6 +57,33 @@
         <input type="url" id="priv" name="privacy_url" placeholder="https://" inputmode="url" maxlength="500">
         <div class="err">Please paste a public https:// link.</div>
       </div>
+      <div class="fld" data-req="terms">
+        <label class="q" for="terms">Terms of service link <span class="req">*</span></label>
+        <p class="hint">Same domain as the homepage. Must start with https://.</p>
+        <input type="url" id="terms" name="terms_url" placeholder="https://" inputmode="url" maxlength="500">
+        <div class="err">Please paste a public https:// link.</div>
+      </div>
+      <div class="fld" data-req="support">
+        <label class="q" for="support">Google Cloud support email <span class="req">*</span></label>
+        <p class="hint">Email shown to users on the Google sign-in screen. Must belong to the project Owner or a Google Group they own.</p>
+        <input type="email" id="support" name="support_email" autocomplete="email" maxlength="200">
+        <div class="err">Please type a valid email.</div>
+      </div>
+      <div class="fld" id="logo-wrap">
+        <label class="q" for="logo">App logo link (optional — skipping a logo approves faster)</label>
+        <p class="hint">Square 120×120 PNG or JPG at an https:// link, if you want a logo on the Google sign-in screen. Leave blank for the fastest approval.</p>
+        <input type="url" id="logo" name="logo_url" placeholder="https://" inputmode="url" maxlength="500">
+        <div class="err">Please paste a public https:// link, or leave this blank.</div>
+      </div>
+      <div class="fld" id="domain">
+        <label class="q">Is your homepage domain verified in Google Search Console? <span class="req">*</span></label>
+        <p class="hint">Google requires the Google Cloud project Owner to verify the domain (usually 1 DNS TXT line) before Branding can be submitted.</p>
+        <div class="opts">
+          <label><input type="radio" name="domain_verified" value="Yes, verified in Search Console"> Yes, verified in Search Console</label>
+          <label><input type="radio" name="domain_verified" value="Not yet (tell me what TXT record to add)"> Not yet (tell me what TXT record to add)</label>
+        </div>
+        <div class="err">Please pick one.</div>
+      </div>
       <div class="fld" data-req="pid">
         <label class="q" for="pid">Google Cloud project ID <span class="req">*</span></label>
         <p class="hint">In Google Cloud, open the project picker at the top left. Copy the ID, not only the display name. It looks like <code>my-app-123456</code>: 6–30 letters, numbers, and hyphens, starting with a letter.</p>
@@ -64,7 +92,7 @@
       </div>
       <div class="fld" id="data">
         <label class="q">Which Google data does your app use? <span class="req">*</span></label>
-        <p class="hint">Tick what the app uses now. Not features you might add later.</p>
+        <p class="hint">Tick what the app uses now. Not features you might add later. Anything other than sign-in opens a few extra questions below. We still start the branding check right away.</p>
         <div class="opts">
           <label><input type="checkbox" name="google_data" value="Sign-in only"> Sign-in only (name and email)</label>
           <label><input type="checkbox" name="google_data" value="Google Drive"> Google Drive</label>
@@ -75,6 +103,32 @@
           <input type="text" name="google_data_other" id="othtxt" maxlength="300" placeholder="What else?" style="display:none">
         </div>
         <div class="err">Please tick at least one. If you tick Other, type what it is.</div>
+      </div>
+      <div class="stage2" id="stage2-wrap" hidden>
+        <h2>Extra details for Google data access (Stage 2)</h2>
+        <p class="stage-note">We submit your Stage 1 Branding check right away so you get moving fast, and use these answers to prepare your Stage 2 data-access submission.</p>
+        <div class="fld" id="picker">
+          <label class="q">Could your app let users pick individual files instead of full account access? <span class="req">*</span></label>
+          <p class="hint">If yes (for example Google Picker / drive.file), we can often skip Google's 1–3 week review and demo video completely.</p>
+          <div class="opts">
+            <label><input type="radio" name="picker_fast_track" value="Yes — picking individual files works for us" disabled> Yes — picking individual files works for us</label>
+            <label><input type="radio" name="picker_fast_track" value="No — our app needs broader background access" disabled> No — our app needs broader background access</label>
+            <label><input type="radio" name="picker_fast_track" value="Not sure — advise me on the fastest option" disabled> Not sure — advise me on the fastest option</label>
+          </div>
+          <div class="err">Please pick one.</div>
+        </div>
+        <div class="fld" id="scope-wrap">
+          <label class="q" for="scope">In 2–3 plain sentences, what does your app do with that Google data? <span class="req">*</span></label>
+          <p class="hint">Example: “When a user clicks Import, we read the Google Doc they picked to summarize it on their dashboard. We do not edit or delete their files.”</p>
+          <textarea id="scope" name="scope_usage" maxlength="1500" disabled></textarea>
+          <div class="err">Please write 2–3 plain sentences about how the app uses that Google data.</div>
+        </div>
+        <div class="fld" id="demo-wrap">
+          <label class="q" for="demo">Unlisted YouTube demo video link (optional right now)</label>
+          <p class="hint">Paste now if you already recorded it, or leave blank while we start Stage 1 Branding and send it later.</p>
+          <input type="url" id="demo" name="demo_video_url" placeholder="https://" inputmode="url" maxlength="500" disabled>
+          <div class="err">Please paste a public https:// link, or leave this blank.</div>
+        </div>
       </div>
       <div class="fld" id="plan">
         <label class="q">Plan <span class="req">*</span></label>
@@ -103,7 +157,7 @@
         <strong>Before you send</strong>
         <ul>
           <li>Done for you ($249), and the $149 upgrade: we refund that fee if Google rejects the app. We do not refund it if you do not reply for 30 days, or if you remove our access before we finish. The original $100 DIY purchase stays final sale.</li>
-          <li>The $100 DIY pack is final sale,.</li>
+          <li>The $100 DIY pack is final sale.</li>
           <li>We cannot guarantee that Google will approve the app.</li>
           <li>A third-party security review (CASA) is not included.</li>
           <li>Full wording: <a href="/terms.html">Terms</a>, <a href="/refunds.html">Refunds</a>, <a href="/privacy.html">Privacy</a>.</li>

@@ -80,6 +80,71 @@ HIDDEN_PACKS = [
     "/get-app-verified-dfy-pack.pdf",
     "/get-app-verified-dfy-pack.zip",
 ]
+INTAKE_COPY = [
+    'action="https://formspree.io/f/xdeejbnl"',
+    'name="name"',
+    'name="email"',
+    'name="app_name"',
+    'name="homepage_url"',
+    'name="privacy_url"',
+    'name="terms_url"',
+    'name="support_email"',
+    'name="logo_url"',
+    'name="domain_verified"',
+    'name="project_id"',
+    'name="google_data"',
+    'name="google_data_other"',
+    'name="plan"',
+    'name="added_access"',
+    'name="notes"',
+    'name="agree_terms"',
+    'name="verification_track"',
+    'name="picker_fast_track"',
+    'name="scope_usage"',
+    'maxlength="1500"',
+    'name="demo_video_url"',
+    'id="stage2-wrap"',
+    'value="Stage 1 only (Fast Branding)"',
+    "Terms of service link",
+    "Same domain as the homepage. Must start with https://.",
+    "Google Cloud support email",
+    "Email shown to users on the Google sign-in screen. Must belong to the project Owner or a Google Group they own.",
+    "App logo link (optional — skipping a logo approves faster)",
+    "Square 120×120 PNG or JPG at an https:// link, if you want a logo on the Google sign-in screen. Leave blank for the fastest approval.",
+    "Is your homepage domain verified in Google Search Console?",
+    "Google requires the Google Cloud project Owner to verify the domain (usually 1 DNS TXT line) before Branding can be submitted.",
+    "Yes, verified in Search Console",
+    "Not yet (tell me what TXT record to add)",
+    "Extra details for Google data access (Stage 2)",
+    "We submit your Stage 1 Branding check right away so you get moving fast, and use these answers to prepare your Stage 2 data-access submission.",
+    "Could your app let users pick individual files instead of full account access?",
+    "If yes (for example Google Picker / drive.file), we can often skip Google's 1–3 week review and demo video completely.",
+    "Yes — picking individual files works for us",
+    "No — our app needs broader background access",
+    "Not sure — advise me on the fastest option",
+    "In 2–3 plain sentences, what does your app do with that Google data?",
+    "Example: “When a user clicks Import, we read the Google Doc they picked to summarize it on their dashboard. We do not edit or delete their files.”",
+    "Unlisted YouTube demo video link (optional right now)",
+    "Paste now if you already recorded it, or leave blank while we start Stage 1 Branding and send it later.",
+    "The $100 DIY pack is final sale.",
+]
+INTAKE_JS = [
+    "Stage 1 only (Fast Branding)",
+    "Stage 1 + Stage 2 (Data scopes)",
+    '"Google Drive"',
+    '"Gmail"',
+    '"Calendar"',
+    '"Sheets/Docs"',
+    '"Other"',
+    "looksLikeSecret",
+    "stage2-wrap",
+    "domain_verified",
+    "picker_fast_track",
+    "logo-wrap",
+    "scope-wrap",
+    "demo-wrap",
+    "validHttps",
+]
 
 
 class LinkParser(HTMLParser):
@@ -136,6 +201,21 @@ def main():
         sys.exit("verify@velda.ai missing")
     if "formspree.io/f/xdeejbnl" not in text:
         sys.exit("formspree endpoint missing")
+    intake = (ROOT / "intake.html").read_text(encoding="utf-8")
+    script = (ROOT / "site.js").read_text(encoding="utf-8")
+    css = (ROOT / "site.css").read_text(encoding="utf-8")
+    if "final sale,." in intake:
+        sys.exit("intake still has the final-sale typo")
+    for needle in INTAKE_COPY:
+        if needle not in intake:
+            sys.exit("intake.html missing: " + needle)
+    for needle in INTAKE_JS:
+        if needle not in script:
+            sys.exit("site.js missing: " + needle)
+    if "#stage2-wrap[hidden]{display:none}" not in css:
+        sys.exit("site.css does not keep a hidden stage 2 section hidden")
+    if "innerHTML" in script:
+        sys.exit("site script uses innerHTML")
     if "OAuth Config Editor" not in text:
         sys.exit("least-privilege role missing")
     if "We are not Google" not in text and "not Google" not in text:
