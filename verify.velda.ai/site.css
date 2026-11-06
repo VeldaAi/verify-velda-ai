@@ -41,6 +41,10 @@ textarea{min-height:110px}
 button.send{margin-top:18px;width:100%;padding:14px;border:0;border-radius:10px;background:#1a56db;color:#fff;font-size:17px;font-weight:700;cursor:pointer;min-height:48px}
 button.send:hover{background:#1646b8}
 #thanks{display:none}
+.stage2{background:#f4f8ff;border:1px solid #d5e3fb;border-left:4px solid #1a56db;border-radius:12px;padding:14px 14px 4px;margin:16px 0 8px}
+.stage2 h2{font-size:20px}
+.stage2 .stage-note{margin:0}
+#stage2-wrap[hidden]{display:none}
 footer{max-width:880px;margin:0 auto;padding:8px 18px 40px;color:#3d4654;font-size:14px}
 footer p{margin:0 0 8px}
 ol.steps{list-style:none;padding:0;margin:0;counter-reset:s}
